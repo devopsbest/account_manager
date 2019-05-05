@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Password</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/semantic-ui/2.4.0/semantic.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+
+</head>
+<body>
+<div id="app">
+    {% raw %}
+
+    <input v-model="message">
+    <button class="ui loading button" id="my_account" @click="get_password">submit</button>
+
+    <p>account is: {{ message }}</p>
+    <p>password is: {{ password }}</p>
+    {% endraw %}
+</div>
+<script>
+
+    var app1 = new Vue({
+        el: '#app',
+        data: {
+            message: 'stest',
+            password: "",
+        },
+
+        methods: {
+            get_password() {
+                axios.get('/accounts', {
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    crossDomain: true,
+                    contentType: "application/json",
+                    params: {
+                        account: this.message,//接口配置参数（相当于url?id=xxxx）
+                    },
+                })
+
+                    .then((response) => {
+                        this.password = response.data['password'];
+                    console.log(response.data['password']);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+            }
+        }
+
+    })
+
+
+</script>
+
+</body>
+</html>
